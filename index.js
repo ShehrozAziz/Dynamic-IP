@@ -12,7 +12,9 @@ app.post('/register', (req, res) => {
     console.log(`Registered: ${serviceName} -> ${localAddress}`);
     res.send({ message: 'Service registered successfully!' });
 });
-
+app.get('/', (req, res) => {
+    res.send('Service Registry');
+});
 app.get('/services', (req, res) => {
     res.json(services);
 });
