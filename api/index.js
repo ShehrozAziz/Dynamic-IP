@@ -5,9 +5,8 @@ const app = express();
 const port = process.env.PORT || 3001;
 app.use(express.json());
 
-// JSONBin.io settings
-const BIN_ID = 'proces.env.JSONBIN_BIN_ID'; // replace with your JSONBin Bin ID
-const API_KEY = 'proces.env.JSONBIN_API_KEY'; // replace with your JSONBin API key
+const BIN_ID = process.env.JSONBIN_BIN_ID; // replace with your JSONBin Bin ID
+const API_KEY = process.env.JSONBIN_API_KEY; // replace with your JSONBin API key
 const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 // Register service
