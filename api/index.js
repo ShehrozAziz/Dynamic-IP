@@ -13,42 +13,50 @@ const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 // Register service
 app.post('/register', async (req, res) => {
     const { serviceName, localAddress } = req.body;
-
     try {
-        // Fetch existing services first
-        const response = await axios.get(BASE_URL + '/latest', {
-            headers: { 'X-Master-Key': API_KEY }
+        // Fetch existing data
+        const response = await axios.get(BASE_URL, {
+            headers: {
+                'X-Master-Key': API_KEY
+            }
         });
+        let data = response.data.record;
 
-        let services = response.data.record || {};
-        services[serviceName] = localAddress;
+        // Add/Update service inside "services" object
+        data.services = data.services || {};
+        data.services[serviceName] = localAddress;
 
-        // Update the JSON bin
-        await axios.put(BASE_URL, services, {
+        // Push updated data back
+        await axios.put(BASE_URL, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-Master-Key': API_KEY,
-                'X-Bin-Versioning': false
+                'X-Master-Key': API_KEY
             }
         });
 
-        res.json({ message: 'Service registered successfully!' });
+        res.send({ message: 'Service registered successfully!' });
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: 'Failed to register service.' });
+        console.error(err.response ? err.response.data : err);
+        res.status(500).send({ error: 'Failed to register service' });
     }
 });
+
 
 // Get all services
 app.get('/services', async (req, res) => {
     try {
-        const response = await axios.get(BASE_URL + '/latest', {
-            headers: { 'X-Master-Key': API_KEY }
+        const response = await axios.get(BASE_URL, {
+            headers: {
+                'X-Master-Key': API_KEY
+            }
         });
-        res.json(response.data.record);
+        const data = response.data.record;
+
+        // Only send back the "services" object
+        res.json(data.services || {});
     } catch (err) {
-        console.error(err.message);
-        res.status(500).json({ error: 'Failed to fetch services.' });
+        console.error(err.response ? err.response.data : err);
+        res.status(500).send({ error: 'Failed to fetch services' });
     }
 });
 
