@@ -36,6 +36,7 @@ app.post('/register', async (req, res) => {
         res.send({ message: 'Service registered successfully!' });
     } catch (err) {
         console.error(err.response ? err.response.data : err);
+        console.log(process.env.JSONBIN_BIN_ID);
         res.status(500).send({ error: 'Failed to register service' });
     }
 });
