@@ -60,6 +60,17 @@ app.get('/services', async (req, res) => {
     }
 });
 
+app.post('/test', async (req, res) => {
+    try {
+        const { message } = req.body;
+        console.log('Received test message:', message);
+        res.status(200).json({ success: true, reply: `Received your message: ${message}` });
+    } catch (error) {
+        console.error('Test endpoint error:', error.message);
+        res.status(500).json({ error: 'Test endpoint failed' });
+    }
+});
+
 // Home route
 app.get('/', (req, res) => {
     res.send('Service Registry using JSONBin.io');
